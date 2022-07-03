@@ -11,17 +11,24 @@
 
     <artifactId>plugin-mongo-core</artifactId>
 
+    <properties>
+        <java.version>1.8</java.version>
+        <lombok.version>1.18.22</lombok.version>
+        <springboot.version>2.2.8.RELEASE</springboot.version>
+    </properties>
+
     <dependencies>
 
         <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-mongodb</artifactId>
-            <optional>true</optional>
+            <version>${springboot.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
+            <version>1.18.22</version>
             <optional>true</optional>
         </dependency>
 
