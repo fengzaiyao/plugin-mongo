@@ -7,8 +7,8 @@ import io.github.fengzaiyao.plugin.mongo.dynamic.aop.DataSourceInterceptor;
 import io.github.fengzaiyao.plugin.mongo.dynamic.config.DynamicDSProperties;
 import io.github.fengzaiyao.plugin.mongo.dynamic.creator.DataSourceCreator;
 import io.github.fengzaiyao.plugin.mongo.dynamic.creator.DefaultDataSourceCreator;
-import io.github.fengzaiyao.plugin.mongo.dynamic.provider.DataSourceInnerProvider;
 import io.github.fengzaiyao.plugin.mongo.dynamic.provider.DataSourceProvider;
+import io.github.fengzaiyao.plugin.mongo.dynamic.provider.DefaultDataSourceProvider;
 import org.springframework.aop.Advisor;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -32,8 +32,8 @@ public class DataSourceAutoConfiguration {
     }
 
     @Bean
-    public DataSourceProvider mongoPluginInnerDataSourceProvider(DynamicDSProperties properties) {
-        return new DataSourceInnerProvider(properties.getDatasource());
+    public DataSourceProvider mongoPluginInnerDataSourceProvider(DataSourceCreator sourceCreator, DynamicDSProperties properties) {
+        return new DefaultDataSourceProvider(sourceCreator, properties.getDatasource());
     }
 
     @Bean

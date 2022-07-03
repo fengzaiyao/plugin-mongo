@@ -24,12 +24,12 @@ public class DataSourceInterceptor implements MethodInterceptor {
     public Object invoke(MethodInvocation invocation) throws Throwable {
         Object targetObject = invocation.getThis();
         String datasource = classResolve.computeDatasource(targetObject);
-        // 如果拥有@DataSource注解标识,对数据源进行更换
+        // 标记 @DataSource 注解
         if (!StringUtils.isEmpty(datasource)) {
             Method method = targetObject.getClass().getMethod("setMongoTemplate", MongoTemplate.class);
-            MongoTemplate replaceDS = sourceProvider.getDataSources(datasource);
+            MongoTemplate replaceDS = sourceProvider.getDataSource(datasource);
             if (replaceDS == null) {
-                throw new NotFindDataSourceException("DataSourceProvider can not find data source : " + datasource);
+                throw new NotFindDataSourceException("No data source named " + datasource + " was found");
             }
             method.invoke(targetObject, replaceDS);
         }

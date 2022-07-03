@@ -1,40 +1,51 @@
 package io.github.fengzaiyao.plugin.mongo.dynamic.provider;
 
 import io.github.fengzaiyao.plugin.mongo.dynamic.creator.DataSourceCreator;
-import org.springframework.beans.factory.SmartInitializingSingleton;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.mongo.MongoProperties;
 import org.springframework.data.mongodb.core.MongoTemplate;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
-public abstract class AbstractDataSourceProvider implements SmartInitializingSingleton, DataSourceProvider {
+public abstract class AbstractDataSourceProvider implements DataSourceProvider {
 
-    private Map<String, MongoTemplate> sourceMap = new ConcurrentHashMap<>();
+    private final Map<String, MongoTemplate> sourceMap;
 
-    @Autowired
-    private DataSourceCreator sourceCreator;
+    private final DataSourceCreator sourceCreator;
 
-    @Override
-    public MongoTemplate getDataSources(String source) {
-        return sourceMap.get(source);
+    public AbstractDataSourceProvider(DataSourceCreator sourceCreator) {
+        if (Objects.isNull(sourceCreator)) {
+            throw new IllegalArgumentException("DataSourceProvider construction parameters cannot be null");
+        }
+        this.sourceMap = new ConcurrentHashMap<>();
+        this.sourceCreator = sourceCreator;
     }
 
     @Override
-    public Map<String, MongoTemplate> loadDataSources() {
-        Map<String, MongoProperties> propertiesMap = loadDSProperties();
-        for (Map.Entry<String, MongoProperties> item : propertiesMap.entrySet()) {
-            sourceMap.put(item.getKey(), sourceCreator.createDataSource(item.getValue()));
+    public MongoTemplate getDataSource(String sourceName) {
+        return getDataSources().get(sourceName);
+    }
+
+    @Override
+    public Map<String, MongoTemplate> getDataSources() {
+        return sourceMap.isEmpty() ? initDataSources() : sourceMap;
+    }
+
+    private Map<String, MongoTemplate> initDataSources() {
+        Map<String, MongoProperties> propertiesMap = loadDataSourceProperties();
+        if (propertiesMap != null && !propertiesMap.isEmpty()) {
+            for (Map.Entry<String, MongoProperties> entry : propertiesMap.entrySet()) {
+                synchronized (sourceCreator) {
+                    MongoTemplate source = sourceCreator.createDataSource(entry.getValue());
+                    if (!Objects.isNull(source)) {
+                        sourceMap.put(entry.getKey(), source);
+                    }
+                }
+            }
         }
         return sourceMap;
     }
 
-    @Override
-    public void afterSingletonsInstantiated() {
-        // 主动调用创建数据源
-        loadDataSources();
-    }
-
-    protected abstract Map<String, MongoProperties> loadDSProperties();
+    protected abstract Map<String, MongoProperties> loadDataSourceProperties();
 }

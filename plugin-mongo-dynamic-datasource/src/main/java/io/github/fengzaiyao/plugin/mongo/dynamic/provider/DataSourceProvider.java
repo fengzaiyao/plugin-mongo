@@ -6,7 +6,7 @@ import java.util.Map;
 
 public interface DataSourceProvider {
 
-    Map<String, MongoTemplate> loadDataSources();
+    Map<String, MongoTemplate> getDataSources();
 
-    MongoTemplate getDataSources(String source);
+    MongoTemplate getDataSource(String sourceName);
 }
