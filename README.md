@@ -1,6 +1,7 @@
 # MongoPlugin的功能
-1. 支持类似于MyBatis-plus的BaseService这种基本操作
-2. 动态切换数据源
+1. 支持类似于MyBatis-plus的BaseService的基本操作
+2. 多数据源自动生成
+3. 切换数据源
 
 # 支持基本的操作
 1.先引入下面的依赖
