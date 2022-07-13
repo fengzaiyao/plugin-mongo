@@ -1,6 +1,6 @@
-package io.github.fengzaiyao.plugin.mongo;
+package io.github.fengzaiyao.plugin.mongo.test;
 
-import io.github.fengzaiyao.plugin.mongo.service.IBrandService;
+import io.github.fengzaiyao.plugin.mongo.test.service.IBrandService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -8,6 +8,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 
 import javax.annotation.Resource;
 
+@SuppressWarnings("all")
 @SpringBootTest
 public class MongoPluginTestApplication {
 

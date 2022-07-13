@@ -6,7 +6,7 @@
     <modules>
         <module>plugin-mongo-core</module>
         <module>plugin-mongo-dynamic-datasource</module>
-        <module>test</module>
+        <module>plugin-mongo-test</module>
     </modules>
 
     <parent>

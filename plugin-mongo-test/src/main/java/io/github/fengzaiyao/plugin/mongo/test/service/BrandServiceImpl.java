@@ -1,8 +1,8 @@
-package io.github.fengzaiyao.plugin.mongo.service;
+package io.github.fengzaiyao.plugin.mongo.test.service;
 
 import io.github.fengzaiyao.plugin.mongo.core.service.BaseServiceImpl;
 import io.github.fengzaiyao.plugin.mongo.dynamic.annotation.DataSource;
-import io.github.fengzaiyao.plugin.mongo.model.Brand;
+import io.github.fengzaiyao.plugin.mongo.test.model.Brand;
 import org.springframework.stereotype.Service;
 
 @Service
