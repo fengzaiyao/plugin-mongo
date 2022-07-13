@@ -24,7 +24,7 @@ public class MongoPluginTestApplication {
     private MongoTemplate mongoDB2;
 
     @Test
-    public void TestTemplateEQ (){
+    public void TestTemplateEQ() {
         System.out.println(brandService.getMongoTemplate() == mongoDB1);
         System.out.println(mongoDB1);
         System.out.println(mongoDB2);
