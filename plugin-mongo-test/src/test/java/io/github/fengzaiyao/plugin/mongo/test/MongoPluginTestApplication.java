@@ -1,5 +1,6 @@
 package io.github.fengzaiyao.plugin.mongo.test;
 
+import io.github.fengzaiyao.plugin.mongo.test.model.Brand;
 import io.github.fengzaiyao.plugin.mongo.test.service.IBrandService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,9 +28,11 @@ public class MongoPluginTestApplication {
     @Test
     public void TestTemplateEQ() {
         System.out.println(brandService.getMongoTemplate() == mongoDB1);
-        System.out.println(mongoDB1);
-        System.out.println(mongoDB2);
-        System.out.println(mongoTemplate);
-        System.out.println(brandService.getMongoTemplate());
+    }
+
+    @Test
+    public void TestTemplateBaseOperation() {
+        Brand brand = brandService.findById("xxxxx");
+        System.out.println(brand);
     }
 }
