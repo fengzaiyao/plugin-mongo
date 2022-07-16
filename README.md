@@ -11,6 +11,11 @@
   <artifactId>plugin-mongo-core</artifactId>
   <version>1.0.0</version>
 </dependency>
+
+<dependency>
+    <groupId>org.springframework.data</groupId>
+    <artifactId>spring-data-mongodb</artifactId>
+</dependency>
 ```
 2.配置文件配置
 ```properties
@@ -63,6 +68,11 @@ public class MongoPluginTestApplication {
   <groupId>io.github.fengzaiyao</groupId>
   <artifactId>plugin-mongo-dynamic-datasource</artifactId>
   <version>1.0.0</version>
+</dependency>
+
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-aop</artifactId>
 </dependency>
 ```
 
