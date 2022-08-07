@@ -56,38 +56,40 @@ public class BaseServiceImpl<T extends BaseEntity, ID> implements IBaseService<T
 
     @Override
     public List<T> findAllById(List<ID> ids) {
-        Criteria criteria = commonBaseCriteria();
-        criteria = criteria.andOperator(Criteria.where(ReflectionsUtil.convert(T::getId)).in(ids));
-        Query query = new Query(criteria);
+        Criteria baseCriteria = commonBaseCriteria();
+        Criteria criteria = Criteria.where(ReflectionsUtil.convert(T::getId)).in(ids);
+        Query query = new Query(new Criteria().andOperator(criteria, baseCriteria));
         return getMongoTemplate().find(query, entityClass);
     }
 
     @Override
     public List<T> findAllByBzId(List<String> bzIds) {
-        Criteria criteria = commonBaseCriteria();
-        criteria = criteria.andOperator(Criteria.where(ReflectionsUtil.convert(T::getBzId)).in(bzIds));
-        return getMongoTemplate().find(new Query(criteria), entityClass);
+        Criteria baseCriteria = commonBaseCriteria();
+        Criteria criteria = Criteria.where(ReflectionsUtil.convert(T::getBzId)).in(bzIds);
+        Query query = new Query(new Criteria().andOperator(criteria, baseCriteria));
+        return getMongoTemplate().find(query, entityClass);
     }
 
     @Override
     public List<T> find(Criteria criteria) {
         Criteria baseCriteria = commonBaseCriteria();
-        criteria = criteria.andOperator(baseCriteria);
-        return getMongoTemplate().find(new Query(criteria), entityClass);
+        Query query = new Query(new Criteria().andOperator(criteria, baseCriteria));
+        return getMongoTemplate().find(query, entityClass);
     }
 
     @Override
     public T findByBzId(String bzId) {
-        Criteria criteria = commonBaseCriteria();
-        criteria = criteria.andOperator(Criteria.where(ReflectionsUtil.convert(T::getBzId)).is(bzId));
-        return getMongoTemplate().findOne(new Query(criteria), entityClass);
+        Criteria baseCriteria = commonBaseCriteria();
+        Criteria criteria = Criteria.where(ReflectionsUtil.convert(T::getBzId)).is(bzId);
+        Query query = new Query(new Criteria().andOperator(criteria, baseCriteria));
+        return getMongoTemplate().findOne(query, entityClass);
     }
 
     @Override
     public T findById(ID id) {
-        Criteria criteria = commonBaseCriteria();
-        criteria = criteria.andOperator(Criteria.where(ReflectionsUtil.convert(T::getId)).is(id));
-        Query query = new Query(criteria);
+        Criteria baseCriteria = commonBaseCriteria();
+        Criteria criteria = Criteria.where(ReflectionsUtil.convert(T::getId)).is(id);
+        Query query = new Query(new Criteria().andOperator(criteria, baseCriteria));
         return getMongoTemplate().findOne(query, entityClass);
     }
 
@@ -105,16 +107,15 @@ public class BaseServiceImpl<T extends BaseEntity, ID> implements IBaseService<T
 
     @Override
     public Boolean deleteById(ID id) {
-        Criteria criteria = Criteria.where(ReflectionsUtil.convert(T::getId)).is(id);
-        Query query = new Query(criteria);
+        Query query = new Query(Criteria.where(ReflectionsUtil.convert(T::getId)).is(id));
         DeleteResult result = getMongoTemplate().remove(query, entityClass);
         return result.wasAcknowledged() && result.getDeletedCount() > 0;
     }
 
     @Override
     public Boolean deleteByBzId(String bzId) {
-        Criteria criteria = Criteria.where(ReflectionsUtil.convert(T::getBzId)).is(bzId);
-        DeleteResult result = getMongoTemplate().remove(new Query(criteria), entityClass);
+        Query query = new Query(Criteria.where(ReflectionsUtil.convert(T::getBzId)).is(bzId));
+        DeleteResult result = getMongoTemplate().remove(query, entityClass);
         return result.wasAcknowledged() && result.getDeletedCount() > 0;
     }
 
@@ -175,8 +176,7 @@ public class BaseServiceImpl<T extends BaseEntity, ID> implements IBaseService<T
 
     private Page<T> findBasePage(Criteria criteria, Pageable pageable, Sort sort) {
         Criteria baseCriteria = commonBaseCriteria();
-        criteria = criteria.andOperator(baseCriteria);
-        Query query = new Query(criteria);
+        Query query = new Query(new Criteria().andOperator(criteria, baseCriteria));
         long totalRecordCnt = getMongoTemplate().count(query, entityClass);
         query.with(pageable);
         if (sort != null) {
@@ -193,7 +193,7 @@ public class BaseServiceImpl<T extends BaseEntity, ID> implements IBaseService<T
                 EntityLogicId entityLogicId = field.getAnnotation(EntityLogicId.class);
                 if (entityLogicId != null && StringUtils.isEmpty(field.get(tObject))) {
                     // 设置bzId,UUID格式
-                    field.set(tObject, UUID.randomUUID().toString());
+                    field.set(tObject, UUID.randomUUID().toString().replace("-", ""));
                 }
             }
         });

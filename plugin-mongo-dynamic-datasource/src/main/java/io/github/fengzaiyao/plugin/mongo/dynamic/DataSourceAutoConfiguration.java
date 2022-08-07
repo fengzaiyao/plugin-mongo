@@ -27,18 +27,18 @@ public class DataSourceAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(DataSourceCreator.class)
-    public DataSourceCreator mongoPluginDefaultDataSourceCreator(ApplicationContext applicationContext) {
+    public DataSourceCreator pmInternalDataSourceCreator(ApplicationContext applicationContext) {
         return new DefaultDataSourceCreator(applicationContext);
     }
 
     @Bean
-    public DataSourceProvider mongoPluginInnerDataSourceProvider(DataSourceCreator sourceCreator, DynamicDSProperties properties) {
+    public DataSourceProvider pmInternalInnerDataSourceProvider(DataSourceCreator sourceCreator, DynamicDSProperties properties) {
         return new DefaultDataSourceProvider(sourceCreator, properties.getDatasource());
     }
 
     @Bean
     @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
-    public Advisor mongoPluginInnerDataSourceAdvisor(DataSourceProvider sourceProvider) {
+    public Advisor pmInternalInnerDataSourceAdvisor(DataSourceProvider sourceProvider) {
         DataSourceInterceptor interceptor = new DataSourceInterceptor(sourceProvider);
         DataSourceAdvisor advisor = new DataSourceAdvisor(interceptor, DataSource.class);
         advisor.setOrder(Ordered.HIGHEST_PRECEDENCE);
