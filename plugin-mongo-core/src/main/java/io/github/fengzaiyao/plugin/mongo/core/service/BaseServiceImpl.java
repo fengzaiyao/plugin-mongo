@@ -127,6 +127,7 @@ public class BaseServiceImpl<T extends BaseEntity, ID> implements IBaseService<T
 
     @Override
     public Boolean updateWithoutNoneById(T tObject) {
+        setBaseFieldValue(tObject, false);
         Update update = new Update();
         Criteria criteria = commonBaseCriteria();
         AtomicBoolean setQueryField = new AtomicBoolean(false);
@@ -156,7 +157,6 @@ public class BaseServiceImpl<T extends BaseEntity, ID> implements IBaseService<T
         if (!setQueryField.get()) {
             return null;
         }
-        setBaseFieldValue(tObject, false);
         UpdateResult result = getMongoTemplate().updateMulti(new Query(criteria), update, tObject.getClass());
         return result.wasAcknowledged() && result.getModifiedCount() > 0;
     }
