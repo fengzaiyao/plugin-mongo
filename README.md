@@ -1,3 +1,5 @@
+[![OSCS Status](https://www.oscs1024.com/platform/badge/fengzaiyao/plugin-mongo.svg?size=small)](https://www.oscs1024.com/project/fengzaiyao/plugin-mongo?ref=badge_small)
+
 # MongoPlugin的功能
 1. 支持类似于MyBatis-plus的BaseService的基本操作
 2. 多数据源自动生成
