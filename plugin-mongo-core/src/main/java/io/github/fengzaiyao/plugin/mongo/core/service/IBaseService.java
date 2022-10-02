@@ -1,5 +1,7 @@
 package io.github.fengzaiyao.plugin.mongo.core.service;
 
+import com.mongodb.client.result.DeleteResult;
+import com.mongodb.client.result.UpdateResult;
 import io.github.fengzaiyao.plugin.mongo.core.model.BaseEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,9 +22,9 @@ public interface IBaseService<T extends BaseEntity, ID> {
 
     Page<T> findPage(Criteria criteria, Pageable pageable);
 
-    List<T> findAllByBzId(List<String> bzIds);
+    List<T> findAllByBzId(Collection<String> bzIds);
 
-    List<T> findAllById(List<ID> ids);
+    List<T> findAllById(Collection<ID> ids);
 
     List<T> find(Criteria criteria);
 
@@ -32,13 +34,13 @@ public interface IBaseService<T extends BaseEntity, ID> {
 
     <S extends T> S insert(S entity);
 
-    <S extends T> Collection<S> insertAll(List<S> entities);
+    <S extends T> Collection<S> insertAll(Collection<S> entities);
 
-    Boolean deleteById(ID id);
+    DeleteResult deleteById(ID id);
 
-    Boolean deleteByBzId(String bzId);
+    DeleteResult deleteByBzId(String bzId);
 
-    Boolean delete(Criteria criteria);
+    DeleteResult delete(Criteria criteria);
 
-    Boolean updateWithoutNoneById(T tObject);
+    UpdateResult updateWithoutNoneById(T tObject);
 }

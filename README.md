@@ -1,17 +1,16 @@
 [![OSCS Status](https://www.oscs1024.com/platform/badge/fengzaiyao/plugin-mongo.svg?size=small)](https://www.oscs1024.com/project/fengzaiyao/plugin-mongo?ref=badge_small)
 
 # MongoPlugin的功能
-1. 支持类似于MyBatis-plus的BaseService的基本操作
-2. 多数据源自动生成
-3. 切换数据源
+1. 支持类似于MyBatis-Plus的BaseService的基本操作
+2. 多数据源自动生成、自动切换数据源
 
-# 支持基本的操作
+# 1.支持基本的操作
 1.先引入下面的依赖
 ```xml
 <dependency>
   <groupId>io.github.fengzaiyao</groupId>
   <artifactId>plugin-mongo-core</artifactId>
-  <version>1.0.0</version>
+  <version>1.0.1</version>
 </dependency>
 
 <dependency>
@@ -62,14 +61,14 @@ public class MongoPluginTestApplication {
     }
 }
 ```
-# 多数据源配置 and 自动切换数据源
+# 2.多数据源配置 and 自动切换数据源
 
 1.在前面引入依赖的基础上再引入下面这个依赖
 ```xml
 <dependency>
   <groupId>io.github.fengzaiyao</groupId>
   <artifactId>plugin-mongo-dynamic-datasource</artifactId>
-  <version>1.0.0</version>
+  <version>1.0.1</version>
 </dependency>
 
 <dependency>
@@ -102,7 +101,7 @@ public class BrandServiceImpl extends BaseServiceImpl<Brand, String> implements 
 }
 ```
 
-# 自定义MongoTemplate的创建
+# 3.自定义MongoTemplate的创建
 有时候，你想自定义MongoTemplate的创建过程，那么你只需要注入 DataSourceCreator 类既可。
 ```
 @Component

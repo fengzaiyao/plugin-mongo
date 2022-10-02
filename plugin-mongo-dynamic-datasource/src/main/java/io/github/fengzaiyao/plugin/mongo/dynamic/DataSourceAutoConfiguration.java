@@ -27,13 +27,13 @@ public class DataSourceAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(DataSourceCreator.class)
-    public DataSourceCreator pmInternalDataSourceCreator(ApplicationContext applicationContext) {
+    public DataSourceCreator pmInternalInnerDataSourceCreator(ApplicationContext applicationContext) {
         return new DefaultDataSourceCreator(applicationContext);
     }
 
     @Bean
-    public DataSourceProvider pmInternalInnerDataSourceProvider(DataSourceCreator sourceCreator, DynamicDSProperties properties) {
-        return new DefaultDataSourceProvider(sourceCreator, properties.getDatasource());
+    public DataSourceProvider pmInternalInnerDataSourceProvider(DataSourceCreator creator, DynamicDSProperties properties) {
+        return new DefaultDataSourceProvider(creator, properties.getDatasource());
     }
 
     @Bean

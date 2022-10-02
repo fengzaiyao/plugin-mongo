@@ -55,7 +55,7 @@ public class BaseServiceImpl<T extends BaseEntity, ID> implements IBaseService<T
     }
 
     @Override
-    public List<T> findAllById(List<ID> ids) {
+    public List<T> findAllById(Collection<ID> ids) {
         Criteria baseCriteria = commonBaseCriteria();
         Criteria criteria = Criteria.where(ReflectionsUtil.convert(T::getId)).in(ids);
         Query query = new Query(new Criteria().andOperator(criteria, baseCriteria));
@@ -63,7 +63,7 @@ public class BaseServiceImpl<T extends BaseEntity, ID> implements IBaseService<T
     }
 
     @Override
-    public List<T> findAllByBzId(List<String> bzIds) {
+    public List<T> findAllByBzId(Collection<String> bzIds) {
         Criteria baseCriteria = commonBaseCriteria();
         Criteria criteria = Criteria.where(ReflectionsUtil.convert(T::getBzId)).in(bzIds);
         Query query = new Query(new Criteria().andOperator(criteria, baseCriteria));
@@ -100,33 +100,30 @@ public class BaseServiceImpl<T extends BaseEntity, ID> implements IBaseService<T
     }
 
     @Override
-    public <S extends T> Collection<S> insertAll(List<S> entities) {
+    public <S extends T> Collection<S> insertAll(Collection<S> entities) {
         entities.forEach(e -> setBaseFieldValue(e, true));
         return getMongoTemplate().insertAll(entities);
     }
 
     @Override
-    public Boolean deleteById(ID id) {
+    public DeleteResult deleteById(ID id) {
         Query query = new Query(Criteria.where(ReflectionsUtil.convert(T::getId)).is(id));
-        DeleteResult result = getMongoTemplate().remove(query, entityClass);
-        return result.wasAcknowledged() && result.getDeletedCount() > 0;
+        return getMongoTemplate().remove(query, entityClass);
     }
 
     @Override
-    public Boolean deleteByBzId(String bzId) {
+    public DeleteResult deleteByBzId(String bzId) {
         Query query = new Query(Criteria.where(ReflectionsUtil.convert(T::getBzId)).is(bzId));
-        DeleteResult result = getMongoTemplate().remove(query, entityClass);
-        return result.wasAcknowledged() && result.getDeletedCount() > 0;
+        return getMongoTemplate().remove(query, entityClass);
     }
 
     @Override
-    public Boolean delete(Criteria criteria) {
-        DeleteResult result = getMongoTemplate().remove(new Query(criteria), entityClass);
-        return result.wasAcknowledged() && result.getDeletedCount() > 0;
+    public DeleteResult delete(Criteria criteria) {
+        return getMongoTemplate().remove(new Query(criteria), entityClass);
     }
 
     @Override
-    public Boolean updateWithoutNoneById(T tObject) {
+    public UpdateResult updateWithoutNoneById(T tObject) {
         setBaseFieldValue(tObject, false);
         Update update = new Update();
         Criteria criteria = commonBaseCriteria();
@@ -157,8 +154,7 @@ public class BaseServiceImpl<T extends BaseEntity, ID> implements IBaseService<T
         if (!setQueryField.get()) {
             return null;
         }
-        UpdateResult result = getMongoTemplate().updateMulti(new Query(criteria), update, tObject.getClass());
-        return result.wasAcknowledged() && result.getModifiedCount() > 0;
+        return getMongoTemplate().updateMulti(new Query(criteria), update, tObject.getClass());
     }
 
     private Class<T> getEntityClass() {
